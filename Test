@@ -1,0 +1,75 @@
+using PuppeteerSharp;
+using System.IO;
+using System.Text;
+using System;
+using System.Threading.Tasks;
+using System.Linq;
+
+namespace HtmlSharp
+{
+    public class Program
+    {
+        static async Task Main(string[] args)
+        {
+            //EU POSSUO UM HTML, NA QUAL POSSO MANIPULAR USANDO O C#
+            var html = @"
+                <!DOCTYPE html>
+                <html lang=""en"">
+                <head>
+                    <meta charset=""UTF-8"">
+                    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                    <title>Hello World</title>
+                </head>
+                <body>
+                    <h1>Hello World</h1>
+                </body>
+                </html>
+            ";
+            Build(html);
+
+            var result = await Run();
+            Console.WriteLine(result);
+        }
+
+        static void Build(string html)
+        {
+            try
+            {
+                string filePath = $@"{Environment.CurrentDirectory}/hello.html"; //CASO HOUVER UM ARQUIVO JÁ EXISTENTE
+                string fileDestiny = $@"{Environment.CurrentDirectory}/hello.html";
+
+                if (File.Exists(filePath))
+                {
+                    Console.WriteLine("File found: " + filePath);
+                }
+                else
+                {
+                    Console.WriteLine("File not found: " + filePath);
+                }
+
+                File.WriteAllText(fileDestiny, html, Encoding.UTF8);
+                Console.WriteLine("Arquivo HTML criado com Sucesso.");
+            }
+
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+        }
+        static async Task<string>Run()
+        {
+            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true,
+                ExecutablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+            });
+            var page = (await browser.PagesAsync()).First();
+            {
+                await page.GoToAsync($@"{Environment.CurrentDirectory}/hello.html");
+            }
+
+            var content = await page.GetContentAsync();
+            return content;
+        }
+    }
+}
