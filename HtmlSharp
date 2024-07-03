@@ -35,7 +35,7 @@ namespace HtmlSharp
         {
             try
             {
-                string filePath = $@"{Environment.CurrentDirectory}/hello.html"; //CASO HOUVER UM ARQUIVO JÁ EXISTENTE
+                string filePath = $@"{Environment.CurrentDirectory}/hello.html"; //CASO JÁ HOUVER UM ARQUIVO
                 string fileDestiny = $@"{Environment.CurrentDirectory}/hello.html";
 
                 if (File.Exists(filePath))
